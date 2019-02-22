@@ -1,14 +1,12 @@
 exports.up = function(knex, Promise) {
-  knex.schema
-    .createTable("projects", table => {
-      projects.increments();
-      projects.string("name", 256).notNullable();
-      projects.text("description").notNullable();
-      projects.boolean("completed").defaultTo(false);
-    })
-    .then(p => {
-      console.log(p);
-    });
+  return knex.schema.createTable("projects", table => {
+    table.increments();
+    table.string("name", 256).notNullable();
+    table.text("description").notNullable();
+    table.boolean("completed").defaultTo(false);
+  });
 };
 
-exports.down = function(knex, Promise) {};
+exports.down = function(knex, Promise) {
+  return knex.schema.dropTableIfExists("projects");
+};

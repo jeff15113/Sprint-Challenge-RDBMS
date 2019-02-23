@@ -2,7 +2,6 @@ const db = require("./dbConfig.js");
 console.log("projects");
 module.exports = {
   getById,
-  getProjectByID,
   insert
 };
 
@@ -16,9 +15,11 @@ function insert(project) {
 }
 
 function getById(id) {
-  return db("projects")
-    .where({ id })
-    .first();
-}
+  let project = db("projects").where({ id });
+  let actions = db("actions").where({ project_id: id });
 
-function getProjectByID(id) {}
+  return Promise.all([project, actions]).then(results => {
+    const [project, actions] = results;
+    return { ...project, actions: [...actions] };
+  });
+}
